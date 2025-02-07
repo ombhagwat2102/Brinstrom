@@ -1,21 +1,24 @@
-name: Deploy WordPress
+name: Deploy via SCP
+
 on:
   push:
     branches:
-      - main
+      - main  # Change as per your branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Deploy to Server
+      - name: Copy files via SCP
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "."
-          target: "/var/www/html/wordpress"
+          source: "./your-project-folder/*"  # Change this path
+          target: "/home/ubuntu/your-target-folder"
+          strip_components: 1  # Optional, removes parent directories
