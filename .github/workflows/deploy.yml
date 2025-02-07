@@ -1,17 +1,17 @@
-name: Deploy via SCP
+name: Deploy to EC2
 
 on:
   push:
     branches:
-      - main  # Change as per your branch
+      - main  # Change this if needed
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
       - name: Copy files via SCP
         uses: appleboy/scp-action@master
@@ -19,6 +19,7 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "./your-project-folder/*"  # Change this path
-          target: "/home/ubuntu/your-target-folder"
-          strip_components: 1  # Optional, removes parent directories
+          source: "./*"  # Change this to the files you want to copy
+          target: "/home/ubuntu/app"  # Change this to your EC2 target directory
+          strip_components: 1
+          debug: true  # Enable debug mode
